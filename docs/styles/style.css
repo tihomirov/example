@@ -1,0 +1,175 @@
+/*Roof*/
+#roof {
+    width: 500px;
+    height: 30px;
+    float: none;
+    margin-left: 150px;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+a:hover{
+    color: lightskyblue;
+}
+.users, .companies, .addCompany {
+    width: 200px;
+    float: left;
+    text-align: center;
+}
+
+/*Conteiner*/
+
+#container {
+    display: flex;
+    width: 840px;
+    align-items: baseline;
+}
+ul {
+    padding: 5px;
+    margin: 0px;
+}
+li {
+    text-align: center;
+    list-style-type: none;
+    border-bottom: 1px dotted gray;
+    padding: 2px;
+    height: 40px;
+}
+.title {
+    background-color: honeydew;
+}
+
+/*Conteiner Companies*/
+
+#container #companiesList .company-content {
+    margin-top: 8px;
+}
+
+#container #companiesList li div div {
+    float: left;
+    padding: 2px;
+    width: 200px;
+}
+
+/*Conteiner Users*/
+
+#container .users-list li div div{
+    float: left;
+    padding: 2px;
+    width: 200px;
+}
+#container .users-list .user-content {
+     margin-top: 8px;
+ }
+
+/*Buttons*/
+.create-new{
+    margin-left: 769px;
+    width: 30px;
+    height: 30px;
+}
+.buttons, .user-form-button, .company-form-button{
+ text-align: right;
+}
+input[type="button"]{
+    border: none;
+    margin: 5px;
+}
+.button-edit{
+    background: url("../images/edit.gif") no-repeat;
+    height: 16px;
+    width: 16px;
+}
+.button-delete{
+    background: url("../images/remove.gif") no-repeat;
+    height: 16px;
+    width: 16px;
+}
+.button-add{
+    background: url("../images/plus.gif") no-repeat;
+    height: 30px;
+    width: 30px;
+}
+.button-save{
+    background: url("../images/add.gif") no-repeat;
+    height: 30px;
+    width: 30px;
+}
+.button-close{
+    background: url("../images/close.jpg") no-repeat;
+    height: 27px;
+    width: 30px;
+}
+
+/*Form*/
+/*Form-user*/
+#container #usersList li div form {
+    width: 840px;
+    margin: 0;
+    height: 75px;
+    box-sizing: border-box;
+    padding: 1px;
+    border-radius: 5px;
+    background: RGBA(255, 255, 255, 1);
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .45);
+}
+#container #usersList li div form div {
+    margin-top: 10px;
+}
+
+#container #usersList li div form .user-form-button{
+    margin-top: 17px;
+}
+.edit-user-content, .new-user-form{
+    height: 80px;
+}
+.edit-user-content .user-element{
+    display: none;
+}
+
+/*Form-company*/
+#container #companiesList li div form {
+    width: 840px;
+    margin: 0;
+    height: 75px;
+    box-sizing: border-box;
+    padding: 1px;
+    border-radius: 5px;
+    background: RGBA(255, 255, 255, 1);
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .45);
+}
+#container #companiesList li div form div {
+    margin-top: 10px;
+}
+#container #companiesList div form .company-form-button{
+    margin-top: 17px;
+}
+.edit-company-content, .new-company-form{
+    height: 80px;
+}
+.edit-company-content .company-element{
+    display: none;
+}
+
+
+/*Errors*/
+
+/*Error input name*/
+#usersList .input-name.has-error input{
+    border-color: red;
+}
+#companiesList .input-name.has-error input{
+    border-color: red;
+}
+
+/*Error input mail*/
+
+#usersList .input-mail.has-error input{
+    border-color: red;
+}
+#companiesList .input-mail.has-error input{
+    border-color: red;
+}
+
+
