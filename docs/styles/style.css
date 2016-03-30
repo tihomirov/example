@@ -104,7 +104,7 @@ input[type="button"]{
 
 /*Form*/
 /*Form-user*/
-#container #usersList li div form {
+#container .users-list li div form {
     width: 840px;
     margin: 0;
     height: 75px;
@@ -114,11 +114,11 @@ input[type="button"]{
     background: RGBA(255, 255, 255, 1);
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .45);
 }
-#container #usersList li div form div {
+#container .users-list li div form div {
     margin-top: 10px;
 }
 
-#container #usersList li div form .user-form-button{
+#container .users-list li div form .user-form-button{
     margin-top: 17px;
 }
 .edit-user-content, .new-user-form{
@@ -156,7 +156,7 @@ input[type="button"]{
 /*Errors*/
 
 /*Error input name*/
-#usersList .input-name.has-error input{
+.users-list .input-name.has-error input{
     border-color: red;
 }
 #companiesList .input-name.has-error input{
@@ -165,7 +165,7 @@ input[type="button"]{
 
 /*Error input mail*/
 
-#usersList .input-mail.has-error input{
+.users-list .input-mail.has-error input{
     border-color: red;
 }
 #companiesList .input-mail.has-error input{

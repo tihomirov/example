@@ -25,10 +25,11 @@
         if (!isCreate) {
             var oldUserElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
         }
-        var userElement = UsersComponents.user.call(app.UsersCtrl, user);
+        var userElement = UsersComponents.user.call(app.UsersCtrl, user,isCreate,usersList);
 
         if (isCreate) {
             usersList.appendChild(userElement);
+
         } else {
             usersList.replaceChild(userElement, oldUserElement);
         }
@@ -38,55 +39,26 @@
 
         Routing.setUrl('/users');
 
-
-        debugger
-        var xhr= new XMLHttpRequest();
-        xhr.open('GET', '/mb_done2/new/myApp/scripts/core/users/users.html', true);
-        xhr.onreadystatechange= function() {
-            debugger
-            if (this.readyState!==4) return;
-            if (this.status!==200) return; // or whatever error handling you want
-            document.getElementById('y').innerHTML= this.responseText;
-        };
-        xhr.send();
-
-        return
-
         document.querySelector('.users-link').style.textDecoration = 'underline';
         document.querySelector('.companies-link').style.textDecoration = 'none';
         if (users.length === 0) {
             return
         }
 
-        //var container = document.getElementById('container');
-        //container.innerHTML = "<ul id='usersList'></ul>";
+        var xhr= new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/users-tmp.html', false);
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState != 4) return;
+            if (this.status === 200) {
+                document.getElementById('container').innerHTML= this.responseText;
+            }
+        };
+
+        xhr.send();
+
         var usersList = document.querySelector('.users-list');
-
-        var buttonAddUser = document.createElement('li');
-        buttonAddUser.setAttribute('data-user-id', 'undefined');
-        buttonAddUser.className = 'add-user';
-        buttonAddUser.innerHTML = app.Common.CommonComponents.addButton(users);
-        usersList.appendChild(buttonAddUser);
-
-        //var titleElement = document.createElement('li');
-        //titleElement.className = 'title';
-        //var titles = '';
-        //var titleUser = {
-        //    firstName: "First Name",
-        //    lastName: "Last Name",
-        //    mail: "Mail"
-        //};
-        //
-        //for (var key in titleUser) {
-        //    titles += '<div class=' + "property" + key + '>' + titleUser[key] + '</div>';
-        //}
-        //
-        //var titlesContent = document.createElement('div');
-        //titlesContent.className = 'titles';
-        //
-        //titlesContent.innerHTML = titles;
-        //titleElement.appendChild(titlesContent);
-        //usersList.appendChild(titleElement);
 
         for (var i = 0; i < users.length; i++) {
             renderUser(users[i], true, usersList);
@@ -96,6 +68,7 @@
     function openUserForm() {
 
         var user = this;
+        var usersList = document.querySelector('.users-list');
 
         Routing.setUrl('/users/edit/' + user.id);
 
@@ -103,17 +76,36 @@
             user = {firstName: "", lastName: "", mail: ""};
         }
 
-        var userForm = UsersComponents.form.call(app.UsersCtrl,user);
+
+        var xhr= new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/form-tmp.html', false);
+
+        var userForma = document.createElement('div');
+        userForma.className = " edit-user-form";
+        userForma.setAttribute('data-edit-user-form', user.id)
+
+        xhr.onreadystatechange = function() {
+
+            if (xhr.readyState != 4) return;
+            if (this.status === 200) {
+                userForma.innerHTML =  this.responseText;
+            }
+        };
+
+        xhr.send();
+
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
         if (user.id) {
             userElement.className = 'edit-user-content';
-            userElement.appendChild(userForm);
+            userElement.appendChild(userForma);
+            UsersComponents.form.call(app.UsersCtrl,user);
+
         }else {
-            var usersList = document.getElementById('usersList');
             var newUserForm = document.createElement('li');
             newUserForm.className = " new-user-form";
-            newUserForm.appendChild(userForm);
+            newUserForm.appendChild(userForma);
+            UsersComponents.form.call(app.UsersCtrl,user);
             userElement.style.display = 'none';
             usersList.insertBefore(newUserForm, usersList.children[0]);
         }

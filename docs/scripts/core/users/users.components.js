@@ -7,45 +7,46 @@
     };
 
     function user(user) {
+        var clone = document.querySelector('.user-content');
+        var userLi = clone.cloneNode(true);
+        userLi.setAttribute('data-user-id', user.id);
 
-        var userLine = document.createElement('li');
+        var userDiv = userLi.childNodes[1];
+        var userDivChild = userDiv.childNodes;
+        for (var i = 0; i < userDivChild.length; i++) {
+            if (userDivChild[i].nodeType === 1) {
+                if (i = 1) {
+                    userDivChild[i].textContent = user.firstName;
+                }
+                if (i = 3) {
+                    userDivChild[i].textContent = user.lastName;
+                }
+                if (i = 5) {
+                    userDivChild[i].textContent = user.mail;
+                }
+                break
+            }
+        }
 
-        userLine.setAttribute('data-user-id', user.id);
-        userLine.setAttribute('class', 'user-content');
-
-        var userRow = '<div class="user-name">' + user.firstName + '</div>' +
-            '<div class="user-address">' + user.lastName + '</div>' +
-            '<div class="user-email">' + user.mail + '</div>';
-
-        var userHtml = '<div class="user-element">' + userRow +
-            '<div class="buttons">' + '<input type="button" class="button-edit" title="Edit Company">'
-            + '<input type="button" class="button-delete" title="Delete Company">' + '</div>' + '</div>';
-
-        userLine.innerHTML = userHtml;
-
-        var editButton = userLine.querySelector(".button-edit");
-        var deleteButton = userLine.querySelector(".button-delete");
+        var editButton = userLi.querySelector(".button-edit");
+        var deleteButton = userLi.querySelector(".button-delete");
 
         editButton.addEventListener("click", app.Users.UsersCtrl.openUserForm.bind(user));
         deleteButton.addEventListener("click", app.Users.UsersCtrl.deleteUser.bind(user));
 
-        return userLine;
+        return userLi;
     }
 
     function form(user) {
-        var userForm = document.createElement('div');
-        userForm.className = " edit-user-form";
 
-        var form = '<form name="forma" class="form" data-edit-user-form=' + user.id + '>'
-            + '<div  class="input-name">' + '<span class="label">' + "First Name" + '</span>'
-            + '<input data-input-name="input-user-name" name="firstName" size="20" placeholder="FirstName" value=' + user.firstName + '>' + '</div>'
-            + '<div>' + '<span>' + "Last Name" + '</span>' + '<input  name="lastName"  size="20" placeholder="LastName" value=' + user.lastName + ' >' + '</div>'
-            + '<div class="input-mail">' + '<span class="label">' + "Mail" + '</span>'
-            + '<input data-input-mail="input-user-mail" type="email" name="mail"  size="20" placeholder="Mail" value=' + user.mail + '>' + '</div>'
-            + '<div class="user-form-button">' + '<input type="button" class="button-save">'
-            + '<input type="button" class="button-close">' + '</div>' + '</form>';
+        var userForm = document.querySelector('[data-edit-user-form=\'' + user.id + '\']');
+        var inputName = userForm.querySelector('[data-input-name=input-user-name]');
+        var inputSurname = userForm.querySelector('[data-input-surname=input-user-surname]');
+        var inputMail = userForm.querySelector('[data-input-mail=input-user-mail]');
 
-        userForm.innerHTML = form;
+        inputName.value = user.firstName;
+        inputSurname.value = user.lastName;
+        inputMail.value = user.mail;
 
         var saveButton = userForm.querySelector(".button-save");
         var closeButton = userForm.querySelector(".button-close");
