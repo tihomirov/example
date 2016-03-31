@@ -58,24 +58,25 @@
 
         xhr.send();
 
+        app.Common.CommonComponents.addButton();
+
         var usersList = document.querySelector('.users-list');
 
         for (var i = 0; i < users.length; i++) {
             renderUser(users[i], true, usersList);
         }
+
+        var example = document.querySelector('.user-content.example');
+        usersList.removeChild(example);
     }
 
     function openUserForm() {
 
         var user = this;
-        var usersList = document.querySelector('.users-list');
-
-        Routing.setUrl('/users/edit/' + user.id);
 
         if(user.id === undefined){
             user = {firstName: "", lastName: "", mail: ""};
         }
-
 
         var xhr= new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/form-tmp.html', false);
@@ -85,7 +86,6 @@
         userForma.setAttribute('data-edit-user-form', user.id)
 
         xhr.onreadystatechange = function() {
-
             if (xhr.readyState != 4) return;
             if (this.status === 200) {
                 userForma.innerHTML =  this.responseText;
@@ -96,18 +96,15 @@
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
-        if (user.id) {
-            userElement.className = 'edit-user-content';
+        if (user.id !== undefined) {
+            userElement.classList.add('edit');
             userElement.appendChild(userForma);
             UsersComponents.form.call(app.UsersCtrl,user);
 
         }else {
-            var newUserForm = document.createElement('li');
-            newUserForm.className = " new-user-form";
-            newUserForm.appendChild(userForma);
+            userElement.appendChild(userForma);
+            userElement.classList.add("new");
             UsersComponents.form.call(app.UsersCtrl,user);
-            userElement.style.display = 'none';
-            usersList.insertBefore(newUserForm, usersList.children[0]);
         }
     }
 
@@ -115,8 +112,7 @@
 
         var user = this;
 
-        var form = document.querySelector("[data-edit-user-form='" + user.id + "']");
-
+        var form = document.querySelector("[data-edit-user-form='" + user.id + "']").firstChild;
         var isValidName = CommonControl.validateName.call(form.firstName);
         var isValidEmail = CommonControl.validateMail.call(form.mail);
 
@@ -133,9 +129,9 @@
                     renderUser(editUser, false);
                 } else {
                     renderUser(editUser, true);
-                    usersList.removeChild(usersList.firstChild);
                     var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
-                    userElement.style.display = 'block';
+                    userElement.removeChild(userElement.lastChild);
+                    userElement.classList.remove("new");
                 }
             });
         }
@@ -143,6 +139,7 @@
 
     function deleteUser() {
 
+        var usersList = document.querySelector('.users-list');
         UserService.deleteUser(this.id, function (removeUser) {
             var oldUserElement = document.querySelector('[data-user-id=\'' + removeUser + '\']');
             usersList.removeChild(oldUserElement);
@@ -154,11 +151,11 @@
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
         if (user.id !== undefined) {
-            userElement.className = 'user-content';
+            userElement.classList.remove('edit');
             userElement.removeChild(userElement.lastChild)
         } else {
-            usersList.removeChild(usersList.firstChild);
-            userElement.style.display = 'block';
+            userElement.removeChild(userElement.lastChild);
+            userElement.classList.remove("new")
         }
     }
 

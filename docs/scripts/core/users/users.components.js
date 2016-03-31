@@ -9,6 +9,7 @@
     function user(user) {
         var clone = document.querySelector('.user-content');
         var userLi = clone.cloneNode(true);
+        clone.classList.add('example');
         userLi.setAttribute('data-user-id', user.id);
 
         var userDiv = userLi.childNodes[1];
@@ -58,7 +59,6 @@
         nameInput.addEventListener("input", app.Common.CommonCtrl.validateName.bind(nameInput));
         mailInput.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(mailInput));
 
-        return userForm;
     }
 
 }());

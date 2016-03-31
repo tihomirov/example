@@ -59,10 +59,13 @@
     }
 
     function addItemForm(){
+
         var currentUrl = Routing.getUrl();
+
         if (currentUrl === '/companies') {
             return app.Companies.CompaniesCtrl.openCompanyForm();
-        } else {
+        }
+        if(currentUrl === '/users') {
             return app.Users.UsersCtrl.openUserForm();
         }
     }

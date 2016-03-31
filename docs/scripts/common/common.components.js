@@ -5,8 +5,10 @@
     };
 
     function addButton() {
-        var buttonContent = '<div class="create-new">' + '<input  type="button" class="button-add" onclick="app.Common.CommonCtrl.addItemForm()">' + '</div>';
-        return buttonContent;
-    }
+        var userForm = document.querySelector('.add-user');
+        userForm.setAttribute('data-user-id', 'undefined');
 
+        var addButton = userForm.querySelector(".button-add");
+        addButton.addEventListener("click", app.Common.CommonCtrl.addItemForm);
+    }
 }());

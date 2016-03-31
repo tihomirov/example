@@ -121,10 +121,17 @@ input[type="button"]{
 #container .users-list li div form .user-form-button{
     margin-top: 17px;
 }
-.edit-user-content, .new-user-form{
+
+.add-user.new, .edit-user-form{
     height: 80px;
 }
-.edit-user-content .user-element{
+.add-user.new .create-new{
+    display: none;
+}
+.user-content.edit, .edit-user-form{
+    height: 80px;
+}
+.user-content.edit .user-element{
     display: none;
 }
 
