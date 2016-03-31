@@ -25,7 +25,7 @@
         if (!isCreate) {
             var oldUserElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
         }
-        var userElement = UsersComponents.user.call(app.UsersCtrl, user,isCreate,usersList);
+        var userElement = UsersComponents.user.call(app.UsersCtrl, user, isCreate, usersList);
 
         if (isCreate) {
             usersList.appendChild(userElement);
@@ -45,14 +45,14 @@
             return
         }
 
-        var xhr= new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/users-tmp.html', false);
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
 
             if (xhr.readyState != 4) return;
             if (this.status === 200) {
-                document.getElementById('container').innerHTML= this.responseText;
+                document.getElementById('container').innerHTML = this.responseText;
             }
         };
 
@@ -66,29 +66,29 @@
             renderUser(users[i], true, usersList);
         }
 
-        var example = document.querySelector('.user-content.example');
-        usersList.removeChild(example);
+        var example = document.querySelector('[data-id=example]');
+        usersList.removeChild(example)
     }
 
     function openUserForm() {
 
         var user = this;
 
-        if(user.id === undefined){
+        if (user.id === undefined) {
             user = {firstName: "", lastName: "", mail: ""};
         }
 
-        var xhr= new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/form-tmp.html', false);
 
         var userForma = document.createElement('div');
         userForma.className = " edit-user-form";
         userForma.setAttribute('data-edit-user-form', user.id)
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState != 4) return;
             if (this.status === 200) {
-                userForma.innerHTML =  this.responseText;
+                userForma.innerHTML = this.responseText;
             }
         };
 
@@ -96,15 +96,15 @@
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
-        if (user.id !== undefined) {
-            userElement.classList.add('edit');
+        if (user.id) {
+            userElement.className = 'edit-user';
             userElement.appendChild(userForma);
-            UsersComponents.form.call(app.UsersCtrl,user);
+            UsersComponents.form.call(app.UsersCtrl, user);
 
-        }else {
+        } else {
             userElement.appendChild(userForma);
-            userElement.classList.add("new");
-            UsersComponents.form.call(app.UsersCtrl,user);
+            userElement.className = 'new-user';
+            UsersComponents.form.call(app.UsersCtrl, user);
         }
     }
 
@@ -116,22 +116,23 @@
         var isValidName = CommonControl.validateName.call(form.firstName);
         var isValidEmail = CommonControl.validateMail.call(form.mail);
 
-        if(isValidName && isValidEmail) {
+        if (isValidName && isValidEmail) {
             var userDTO = {
-                id: user.id ? user.id : undefined,
                 firstName: form.firstName.value,
                 lastName: form.lastName.value,
-                mail: form.mail.value
+                mail: form.mail.value,
+                id: user.id ? user.id : undefined
             };
 
             UserService.saveUser(userDTO, function (editUser) {
                 if (user.id !== undefined) {
+                    closeForm(user);
+
                     renderUser(editUser, false);
                 } else {
+                    closeForm(user);
+
                     renderUser(editUser, true);
-                    var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
-                    userElement.removeChild(userElement.lastChild);
-                    userElement.classList.remove("new");
                 }
             });
         }
@@ -147,17 +148,20 @@
     }
 
     function closeForm(user) {
-        var user= this;
+        if (user === event) {
+            var user = this;
+        }
+
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
         if (user.id !== undefined) {
-            userElement.classList.remove('edit');
+            userElement.className = 'user-content';
             userElement.removeChild(userElement.lastChild)
         } else {
             userElement.removeChild(userElement.lastChild);
-            userElement.classList.remove("new")
+            userElement.className = 'add-user';
         }
     }
 
-    //renderUsers();
+    renderUsers();
 }());

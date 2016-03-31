@@ -122,16 +122,16 @@ input[type="button"]{
     margin-top: 17px;
 }
 
-.add-user.new, .edit-user-form{
+.new-user, .edit-user-form{
     height: 80px;
 }
-.add-user.new .create-new{
+.new-user .create-new{
     display: none;
 }
-.user-content.edit, .edit-user-form{
+.edit-user, .edit-user-form{
     height: 80px;
 }
-.user-content.edit .user-element{
+.edit-user .user-element{
     display: none;
 }
 

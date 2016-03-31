@@ -9,11 +9,12 @@
     function user(user) {
         var clone = document.querySelector('.user-content');
         var userLi = clone.cloneNode(true);
-        clone.classList.add('example');
         userLi.setAttribute('data-user-id', user.id);
+        userLi.removeAttribute('data-id');
 
         var userDiv = userLi.childNodes[1];
         var userDivChild = userDiv.childNodes;
+
         for (var i = 0; i < userDivChild.length; i++) {
             if (userDivChild[i].nodeType === 1) {
                 if (i = 1) {
@@ -34,6 +35,7 @@
 
         editButton.addEventListener("click", app.Users.UsersCtrl.openUserForm.bind(user));
         deleteButton.addEventListener("click", app.Users.UsersCtrl.deleteUser.bind(user));
+
 
         return userLi;
     }
