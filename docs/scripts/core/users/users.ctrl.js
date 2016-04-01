@@ -3,11 +3,20 @@
 
     var Routing = app.Routing;
     var UserService = app.Users.UsersSrv;
-    var UsersComponents = app.Users.UsersComponents;
     var CommonControl = app.Common.CommonCtrl;
 
     var users = UserService.getAllUsers();
 
+    users.sort(function (a, b) {
+        if (a.firstName > b.firstName) {
+            return 1;
+        }
+        if (a.firstName < b.firstName) {
+            return -1;
+        }
+        return 0;
+    });
+    
     renderUsers();
 
     app.Users.UsersCtrl = {
