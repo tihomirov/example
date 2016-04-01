@@ -43,7 +43,6 @@
             for (var i = 0; i < users.length; i++) {
                 if (editUser.id === users[i].id)
                     users.splice(i, 1, editUser)
-                console.log(users)
             }
         } else {
             editUser.id = createId();
