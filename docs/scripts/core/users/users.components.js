@@ -10,25 +10,11 @@
         var clone = document.querySelector('.user-content');
         var userLi = clone.cloneNode(true);
         userLi.setAttribute('data-user-id', user.id);
-        userLi.removeAttribute('data-id');
+        userLi.classList.remove('hide');
 
-        var userDiv = userLi.childNodes[1];
-        var userDivChild = userDiv.childNodes;
-
-        for (var i = 0; i < userDivChild.length; i++) {
-            if (userDivChild[i].nodeType === 1) {
-                if (i = 1) {
-                    userDivChild[i].textContent = user.firstName;
-                }
-                if (i = 3) {
-                    userDivChild[i].textContent = user.lastName;
-                }
-                if (i = 5) {
-                    userDivChild[i].textContent = user.mail;
-                }
-                break
-            }
-        }
+        userLi.querySelector('.f-name-fild').textContent = user.firstName;
+        userLi.querySelector('.l-name-fild').textContent = user.lastName;
+        userLi.querySelector('.email-fild').textContent = user.mail;
 
         var editButton = userLi.querySelector(".button-edit");
         var deleteButton = userLi.querySelector(".button-delete");

@@ -179,4 +179,8 @@ input[type="button"]{
     border-color: red;
 }
 
+.hide {
+    display: none;
+}
+
 

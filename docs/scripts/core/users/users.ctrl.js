@@ -8,6 +8,8 @@
 
     var users = UserService.getAllUsers();
 
+    renderUsers();
+
     app.Users.UsersCtrl = {
         renderUser: renderUser,
         renderUsers: renderUsers,
@@ -18,10 +20,10 @@
     };
 
     function renderUser(user, isCreate, usersList) {
-
         if (!usersList) {
             var usersList = document.querySelector('.users-list');
         }
+
         if (!isCreate) {
             var oldUserElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
         }
@@ -46,28 +48,26 @@
         }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/users-tmp.html', false);
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/users-tmp.html', true);
 
         xhr.onreadystatechange = function () {
 
             if (xhr.readyState != 4) return;
             if (this.status === 200) {
                 document.getElementById('container').innerHTML = this.responseText;
+
+                app.Common.CommonComponents.addButton();
+
+                var usersList = document.querySelector('.users-list');
+
+                for (var i = 0; i < users.length; i++) {
+                    renderUser(users[i], true, usersList);
+                }
+
             }
         };
 
         xhr.send();
-
-        app.Common.CommonComponents.addButton();
-
-        var usersList = document.querySelector('.users-list');
-
-        for (var i = 0; i < users.length; i++) {
-            renderUser(users[i], true, usersList);
-        }
-
-        var example = document.querySelector('[data-id=example]');
-        usersList.removeChild(example)
     }
 
     function openUserForm() {
@@ -96,16 +96,9 @@
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
-        if (user.id) {
-            userElement.className = 'edit-user';
-            userElement.appendChild(userForma);
-            UsersComponents.form.call(app.UsersCtrl, user);
-
-        } else {
-            userElement.appendChild(userForma);
-            userElement.className = 'new-user';
-            UsersComponents.form.call(app.UsersCtrl, user);
-        }
+        userElement.className =  user.id ? 'edit-user' : 'new-user';
+        userElement.appendChild(userForma);
+        UsersComponents.form.call(app.UsersCtrl, user);
     }
 
     function saveUser(user) {
@@ -125,15 +118,8 @@
             };
 
             UserService.saveUser(userDTO, function (editUser) {
-                if (user.id !== undefined) {
-                    closeForm(user);
-
-                    renderUser(editUser, false);
-                } else {
-                    closeForm(user);
-
-                    renderUser(editUser, true);
-                }
+                closeForm(user);
+                renderUser(editUser, !user.id);
             });
         }
     }
@@ -154,14 +140,8 @@
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
 
-        if (user.id !== undefined) {
-            userElement.className = 'user-content';
-            userElement.removeChild(userElement.lastChild)
-        } else {
-            userElement.removeChild(userElement.lastChild);
-            userElement.className = 'add-user';
-        }
+        userElement.removeChild(userElement.lastChild)
+        userElement.className =  user.id ? 'add-user' : 'user-content';
     }
 
-    renderUsers();
 }());
