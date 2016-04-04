@@ -17,8 +17,6 @@
         return 0;
     });
     
-    renderUsers();
-
     app.Users.UsersCtrl = {
         renderUser: renderUser,
         renderUsers: renderUsers,
@@ -43,9 +41,9 @@
             userLi.setAttribute('data-user-id', user.id);
             userLi.classList.remove('hide');
 
-            userLi.querySelector('.f-name-fild').textContent = user.firstName;
-            userLi.querySelector('.l-name-fild').textContent = user.lastName;
-            userLi.querySelector('.email-fild').textContent = user.mail;
+            userLi.querySelector('.f-name-field').textContent = user.firstName;
+            userLi.querySelector('.l-name-field').textContent = user.lastName;
+            userLi.querySelector('.email-field').textContent = user.mail;
 
             var editButton = userLi.querySelector(".button-edit");
             var deleteButton = userLi.querySelector(".button-delete");
@@ -84,7 +82,11 @@
             if (this.status === 200) {
                 document.getElementById('container').innerHTML = this.responseText;
 
-                app.Common.CommonComponents.addButton();
+                var userForm = document.querySelector('.add-user');
+                userForm.setAttribute('data-user-id', 'undefined');
+
+                var addButton = userForm.querySelector(".button-add");
+                addButton.addEventListener("click", app.Common.CommonCtrl.addItemForm);
 
                 var usersList = document.querySelector('.users-list');
 
@@ -111,7 +113,7 @@
 
         var userForma = document.createElement('div');
         userForma.className = " edit-user-form";
-        userForma.setAttribute('data-edit-user-form', user.id)
+        userForma.setAttribute('data-edit-user-form', user.id);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState != 4) return;

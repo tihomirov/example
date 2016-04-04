@@ -3,10 +3,21 @@
 
     var Routing = app.Routing;
     var CompanyService = app.Companies.CompaniesSrv;
-    var CompaniesComponents = app.Companies.CompaniesComponents;
     var CommonControl = app.Common.CommonCtrl;
 
     var companies = CompanyService.getAllCompanies();
+
+    companies.sort(function (a, b) {
+        if (a.companyName > b.companyName) {
+            return 1;
+        }
+        if (a.companyName < b.companyName) {
+            return -1;
+        }
+        return 0;
+    });
+
+    renderCompanies();
 
     app.Companies.CompaniesCtrl = {
         renderCompany: renderCompany,
@@ -20,12 +31,30 @@
     function renderCompany(company, isCreate, companiesList) {
 
         if (!companiesList) {
-            var companiesList = document.getElementById('companiesList');
+            var companiesList = document.querySelector('.companies-list');
         }
         if (!isCreate) {
             var oldCompanyElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
         }
-        var companyElement = CompaniesComponents.company.call(app.CompaniesCtrl, company);
+        var companyElement = function() {
+            var clone = document.querySelector('.company-content');
+            var companyLi = clone.cloneNode(true);
+            companyLi.setAttribute('data-company-id', company.id);
+            companyLi.classList.remove('hide');
+
+            companyLi.querySelector('.name-field').textContent = company.companyName;
+            companyLi.querySelector('.address-field').textContent = company.addressCompany;
+            companyLi.querySelector('.email-field').textContent = company.companyMail;
+
+            var editButton = companyLi.querySelector(".button-edit");
+            var deleteButton = companyLi.querySelector(".button-delete");
+
+            editButton.addEventListener("click", app.Companies.CompaniesCtrl.openCompanyForm.bind(company));
+            deleteButton.addEventListener("click", app.Companies.CompaniesCtrl.deleteCompany.bind(company));
+
+
+            return companyLi;
+        };
 
         if (isCreate) {
             companiesList.appendChild(companyElement);
@@ -44,38 +73,28 @@
             return
         }
 
-        var container = document.getElementById('container');
-        container.innerHTML = "<ul id='companiesList'></ul>";
-        var companiesList = document.getElementById('companiesList');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/companies/companies.tpl.html', true);
 
-        var buttonAddCompany = document.createElement('li');
-        buttonAddCompany.setAttribute('data-company-id', 'undefined');
-        buttonAddCompany.className = 'add-company';
-        buttonAddCompany.innerHTML = app.Common.CommonComponents.addButton(companies);
-        companiesList.appendChild(buttonAddCompany);
+        xhr.onreadystatechange = function () {
 
-        var titleElement = document.createElement('li');
-        titleElement.className = 'title';
-        var titles = '';
-        var titleCompany = {
-            companyName: "Company Name",
-            companyAdress: "Company Adress",
-            companMail: "Company Mail"
-        };
+            if (xhr.readyState != 4) return;
+            if (this.status === 200) {
+                document.getElementById('container').innerHTML = this.responseText;
 
-        for (var key in titleCompany) {
-            titles += '<div class=' + "property" + key + '>' + titleCompany[key] + '</div>';
-        }
+                var userForm = document.querySelector('.add-company');
+                userForm.setAttribute('data-company-id', 'undefined');
 
-        var titlesContent = document.createElement('div');
-        titlesContent.className = 'titles';
+                var addButton = userForm.querySelector(".button-add");
+                addButton.addEventListener("click", app.Common.CommonCtrl.addItemForm);
 
-        titlesContent.innerHTML = titles;
-        titleElement.appendChild(titlesContent);
-        companiesList.appendChild(titleElement);
+                var companiesList = document.querySelector('.companies-list');
 
-        for (var i = 0; i < companies.length; i++) {
-            renderCompany(companies[i], true, companiesList);
+                for (var i = 0; i < companies.length; i++) {
+                    renderCompany(companies[i], true, companiesList);
+                }
+
+            }
         }
     }
 
@@ -84,24 +103,30 @@
         var company = this;
 
         if (company.id === undefined) {
-            company = {companyName: "", adressCompany: "", companyMail: ""};
+            company = {companyName: "", addressCompany: "", companyMail: ""};
         }
 
-        var companyForm = CompaniesComponents.form.call(app.CompaniesCtrl, company);
-        var companyElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/companies/form.tpl.html', false);
 
-        if (company.id) {
-            companyElement.className = 'edit-company-content';
-            companyElement.appendChild(companyForm)
-        }
-        else {
-            var companiesList = document.getElementById('companiesList');
-            var newCompanyForm = document.createElement('li');
-            newCompanyForm.className = " new-company-form";
-            newCompanyForm.appendChild(companyForm);
-            companyElement.style.display = 'none';
-            companiesList.insertBefore(newCompanyForm, companiesList.children[0]);
-        }
+        var companyForma = document.createElement('div');
+        companyForma.className = " edit-company-form";
+        companyForma.setAttribute('data-edit-company-form', company.id);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState != 4) return;
+            if (this.status === 200) {
+                companyForma.innerHTML = this.responseText;
+            }
+        };
+
+        xhr.send();
+
+        var userElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
+
+        userElement.className =  company.id ? 'edit-company' : 'new-company';
+        userElement.appendChild(companyForma);
+        form(company);
     }
 
     function saveCompany(company) {
@@ -109,7 +134,6 @@
         var company = this;
 
         var form = document.querySelector('[data-edit-company-form=\'' + company.id + '\']');
-
         var isValidName = CommonControl.validateName.call(form.companyName);
         var isValidEmail = CommonControl.validateMail.call(form.companyMail);
 
@@ -118,25 +142,20 @@
             var companyDTO = {
                 id: company.id ? company.id : undefined,
                 companyName: form.companyName.value,
-                adressCompany: form.adressCompany.value,
+                addressCompany: form.addressCompany.value,
                 companyMail: form.companyMail.value
             };
 
             CompanyService.saveCompany(companyDTO, function (editCompany) {
-                if (company.id !== undefined) {
-                    renderCompany(editCompany, false);
-                } else {
-                    renderCompany(editCompany, true);
-                    companiesList.removeChild(companiesList.firstChild);
-                    var companyElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
-                    companyElement.style.display = 'block';
-                }
+                closeForm(company);
+                renderCompany(editCompany, !company.id);
             });
         }
     }
 
     function deleteCompany() {
 
+        var companiesList = document.querySelector('.companies-list');
         CompanyService.deleteCompany(this.id, function (removeCompany) {
             var oldCompanyElement = document.querySelector('[data-company-id=\'' + removeCompany + '\']');
             companiesList.removeChild(oldCompanyElement);
@@ -144,16 +163,36 @@
     }
 
     function closeForm(company) {
-        var company = this;
-        var companyElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
-
-        if (company.id !== undefined) {
-            companyElement.className = 'company-content';
-            companyElement.removeChild(companyElement.lastChild)
-        } else {
-            companiesList.removeChild(companiesList.firstChild);
-            companyElement.style.display = 'block';
+        if (company === event) {
+            var company = this;
         }
+
+        var companyElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
+        companyElement.removeChild(companyElement.lastChild);
+        companyElement.className =  company.id ?  'company-content' :'add-company';
+    }
+
+    function form(company) {
+
+        var companyForm = document.querySelector('[data-edit-company-form=\'' + company.id + '\']');
+        var inputName = companyForm.querySelector('[data-input-name=input-company-name]');
+        var inputSurname = companyForm.querySelector('[data-input-address=input-company-address]');
+        var inputMail = companyForm.querySelector('[data-input-mail=input-company-mail]');
+
+        inputName.value = company.firstName;
+        inputSurname.value = company.lastName;
+        inputMail.value = company.mail;
+
+        var saveButton = companyForm.querySelector(".button-save");
+        var closeButton = companyForm.querySelector(".button-close");
+        var nameInput = companyForm.querySelector("[data-input-name=input-company-name]");
+        var mailInput = companyForm.querySelector("[data-input-mail=input-company-mail]");
+
+        saveButton.addEventListener("click", app.Companies.CompaniesCtrl.saveUser.bind(company));
+        closeButton.addEventListener("click", app.Companies.CompaniesCtrl.closeForm.bind(company));
+        nameInput.addEventListener("input", app.Common.CommonCtrl.validateName.bind(nameInput));
+        mailInput.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(mailInput));
+
     }
 
 }());

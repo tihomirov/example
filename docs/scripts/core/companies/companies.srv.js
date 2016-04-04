@@ -1,26 +1,26 @@
 "use strict";
 (function () {
 
-    app.Companies.CompaniesSrv = {
+    app.Companies.CompaniesSrv= {
         getAllCompanies: getAllCompanies,
         deleteCompany: deleteCompany,
         saveCompany: saveCompany
     };
 
     var companies = [
-        {companyName: "Samsung", adressCompany: "Seocho-daero", companyMail: "samsung@mail.com", id: createId()},
-        {companyName: "Lenovo", adressCompany: "Apachi", companyMail: "lenovo@mail.com", id: createId()},
-        {companyName: "Apple", adressCompany: "Cupertino", companyMail: "apple@mail.com", id: createId()}
+        {companyName: "Samsung", addressCompany: "Seocho-daero", companyMail: "samsung@mail.com", id: createId()},
+        {companyName: "Lenovo", addressCompany: "Apachi", companyMail: "lenovo@mail.com", id: createId()},
+        {companyName: "Apple", addressCompany: "Cupertino", companyMail: "apple@mail.com", id: createId()}
     ];
 
-    function getAllCompanies(callback) {
+    function getAllCompanies (callback) {
         if (callback) {
             callback(companies)
         }
         return companies;
     }
 
-    function deleteCompany(companyId, callback) {
+    function deleteCompany (companyId, callback) {
 
         var removeCompany = companyId;
 
@@ -35,7 +35,7 @@
         return removeCompany;
     }
 
-    function saveCompany(companyDTO, callback) {
+    function saveCompany (companyDTO, callback) {
 
         var editCompany = companyDTO;
 
