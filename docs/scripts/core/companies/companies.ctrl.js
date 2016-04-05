@@ -17,7 +17,6 @@
         return 0;
     });
 
-    renderCompanies();
 
     app.Companies.CompaniesCtrl = {
         renderCompany: renderCompany,
@@ -57,9 +56,9 @@
         };
 
         if (isCreate) {
-            companiesList.appendChild(companyElement);
+            companiesList.appendChild(companyElement());
         } else {
-            companiesList.replaceChild(companyElement, oldCompanyElement);
+            companiesList.replaceChild(companyElement(), oldCompanyElement);
         }
     }
 
@@ -80,12 +79,12 @@
 
             if (xhr.readyState != 4) return;
             if (this.status === 200) {
+
                 document.getElementById('container').innerHTML = this.responseText;
+                var companyForm = document.querySelector('.add-company');
+                companyForm.setAttribute('data-company-id', 'undefined');
 
-                var userForm = document.querySelector('.add-company');
-                userForm.setAttribute('data-company-id', 'undefined');
-
-                var addButton = userForm.querySelector(".button-add");
+                var addButton = companyForm.querySelector(".button-add");
                 addButton.addEventListener("click", app.Common.CommonCtrl.addItemForm);
 
                 var companiesList = document.querySelector('.companies-list');
@@ -95,7 +94,8 @@
                 }
 
             }
-        }
+        };
+        xhr.send();
     }
 
     function openCompanyForm() {
@@ -107,7 +107,7 @@
         }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:3000/app/scripts/core/companies/form.tpl.html', false);
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/companies/company.form.tpl.html', false);
 
         var companyForma = document.createElement('div');
         companyForma.className = " edit-company-form";
@@ -123,7 +123,6 @@
         xhr.send();
 
         var userElement = document.querySelector('[data-company-id=\'' + company.id + '\']');
-
         userElement.className =  company.id ? 'edit-company' : 'new-company';
         userElement.appendChild(companyForma);
         form(company);
@@ -133,7 +132,7 @@
 
         var company = this;
 
-        var form = document.querySelector('[data-edit-company-form=\'' + company.id + '\']');
+        var form = document.querySelector('[data-edit-company-form=\'' + company.id + '\']').firstChild;
         var isValidName = CommonControl.validateName.call(form.companyName);
         var isValidEmail = CommonControl.validateMail.call(form.companyMail);
 
@@ -179,19 +178,17 @@
         var inputSurname = companyForm.querySelector('[data-input-address=input-company-address]');
         var inputMail = companyForm.querySelector('[data-input-mail=input-company-mail]');
 
-        inputName.value = company.firstName;
-        inputSurname.value = company.lastName;
-        inputMail.value = company.mail;
+        inputName.value = company.companyName;
+        inputSurname.value = company.addressCompany;
+        inputMail.value = company.companyMail;
 
         var saveButton = companyForm.querySelector(".button-save");
         var closeButton = companyForm.querySelector(".button-close");
-        var nameInput = companyForm.querySelector("[data-input-name=input-company-name]");
-        var mailInput = companyForm.querySelector("[data-input-mail=input-company-mail]");
 
-        saveButton.addEventListener("click", app.Companies.CompaniesCtrl.saveUser.bind(company));
+        saveButton.addEventListener("click", app.Companies.CompaniesCtrl.saveCompany.bind(company));
         closeButton.addEventListener("click", app.Companies.CompaniesCtrl.closeForm.bind(company));
-        nameInput.addEventListener("input", app.Common.CommonCtrl.validateName.bind(nameInput));
-        mailInput.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(mailInput));
+        inputName.addEventListener("input", app.Common.CommonCtrl.validateName.bind(inputName));
+        inputMail.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(inputMail));
 
     }
 

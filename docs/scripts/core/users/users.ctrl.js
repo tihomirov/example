@@ -16,7 +16,7 @@
         }
         return 0;
     });
-    
+
     app.Users.UsersCtrl = {
         renderUser: renderUser,
         renderUsers: renderUsers,
@@ -35,7 +35,7 @@
             var oldUserElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
         }
 
-        var userElement = function() {
+        var userElement = function () {
             var clone = document.querySelector('.user-content');
             var userLi = clone.cloneNode(true);
             userLi.setAttribute('data-user-id', user.id);
@@ -96,7 +96,6 @@
 
             }
         };
-
         xhr.send();
     }
 
@@ -104,12 +103,14 @@
 
         var user = this;
 
+        closeOldForm(users);
+
         if (user.id === undefined) {
             user = {firstName: "", lastName: "", mail: ""};
         }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/form.tpl.html', false);
+        xhr.open('GET', 'http://localhost:3000/app/scripts/core/users/user.form.tpl.html', false);
 
         var userForma = document.createElement('div');
         userForma.className = " edit-user-form";
@@ -125,8 +126,7 @@
         xhr.send();
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
-
-        userElement.className =  user.id ? 'edit-user' : 'new-user';
+        userElement.className = user.id ? 'edit-user' : 'new-user';
         userElement.appendChild(userForma);
         form(user);
 
@@ -135,7 +135,6 @@
     function saveUser(user) {
 
         var user = this;
-
         var form = document.querySelector("[data-edit-user-form='" + user.id + "']").firstChild;
         var isValidName = CommonControl.validateName.call(form.firstName);
         var isValidEmail = CommonControl.validateMail.call(form.mail);
@@ -170,9 +169,8 @@
         }
 
         var userElement = document.querySelector('[data-user-id=\'' + user.id + '\']');
-
         userElement.removeChild(userElement.lastChild);
-        userElement.className =  user.id ?  'user-content' :'add-user';
+        userElement.className = user.id ? 'user-content' : 'add-user';
     }
 
     function form(user) {
@@ -188,14 +186,28 @@
 
         var saveButton = userForm.querySelector(".button-save");
         var closeButton = userForm.querySelector(".button-close");
-        var nameInput = userForm.querySelector("[data-input-name=input-user-name]");
-        var mailInput = userForm.querySelector("[data-input-mail=input-user-mail]");
 
         saveButton.addEventListener("click", app.Users.UsersCtrl.saveUser.bind(user));
         closeButton.addEventListener("click", app.Users.UsersCtrl.closeForm.bind(user));
-        nameInput.addEventListener("input", app.Common.CommonCtrl.validateName.bind(nameInput));
-        mailInput.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(mailInput));
+        inputName.addEventListener("input", app.Common.CommonCtrl.validateName.bind(inputName));
+        inputMail.addEventListener("input", app.Common.CommonCtrl.validateMail.bind(inputMail));
 
+    }
+
+    function closeOldForm(users) {
+
+        var form = document.querySelector('[data-edit-user-form]');
+
+        if (form) {
+            var oldUser = {firstName: "", lastName: "", mail: ""};
+            var oldForm = form.getAttribute('data-edit-user-form');
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].id === oldForm) {
+                    oldUser = users[i];
+                }
+            }
+            closeForm(oldUser);
+        }
     }
 
 }());

@@ -5,13 +5,17 @@
     float: none;
     margin-left: 150px;
 }
+
 a {
-  color: black;
-  text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
-a:hover{
+
+a:hover {
     color: lightskyblue;
+    cursor: pointer;
 }
+
 .users, .companies, .addCompany {
     width: 200px;
     float: left;
@@ -25,10 +29,12 @@ a:hover{
     width: 840px;
     align-items: baseline;
 }
+
 ul {
     padding: 5px;
     margin: 0px;
 }
+
 li {
     text-align: center;
     list-style-type: none;
@@ -36,17 +42,18 @@ li {
     padding: 2px;
     height: 40px;
 }
+
 .title {
     background-color: honeydew;
 }
 
 /*Conteiner Companies*/
 
-#container #companiesList .company-content {
+#container .companies-list .company-content {
     margin-top: 8px;
 }
 
-#container #companiesList li div div {
+#container .companies-list li div div {
     float: left;
     padding: 2px;
     width: 200px;
@@ -54,49 +61,59 @@ li {
 
 /*Conteiner Users*/
 
-#container .users-list li div div{
+#container .users-list li div div {
     float: left;
     padding: 2px;
     width: 200px;
 }
+
 #container .users-list .user-content {
-     margin-top: 8px;
- }
+    margin-top: 8px;
+}
 
 /*Buttons*/
-.create-new{
+
+.create-new {
     margin-left: 769px;
     width: 30px;
     height: 30px;
 }
-.buttons, .user-form-button, .company-form-button{
- text-align: right;
+
+.buttons, .user-form-button, .company-form-button {
+    text-align: right;
 }
-input[type="button"]{
+
+input[type="button"] {
     border: none;
     margin: 5px;
+    cursor: pointer;
 }
-.button-edit{
+
+.button-edit {
     background: url("../images/edit.gif") no-repeat;
     height: 16px;
     width: 16px;
 }
-.button-delete{
+
+.button-delete {
     background: url("../images/remove.gif") no-repeat;
     height: 16px;
     width: 16px;
 }
-.button-add{
+
+.button-add {
     background: url("../images/plus.gif") no-repeat;
     height: 30px;
     width: 30px;
 }
-.button-save{
+
+.button-save {
     background: url("../images/add.gif") no-repeat;
     height: 30px;
     width: 30px;
 }
-.button-close{
+
+.button-close {
     background: url("../images/close.jpg") no-repeat;
     height: 27px;
     width: 30px;
@@ -114,29 +131,33 @@ input[type="button"]{
     background: RGBA(255, 255, 255, 1);
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .45);
 }
+
 #container .users-list li div form div {
     margin-top: 10px;
 }
 
-#container .users-list li div form .user-form-button{
+#container .users-list li div form .user-form-button {
     margin-top: 17px;
 }
 
-.new-user, .edit-user-form{
+.new-user, .edit-user-form {
     height: 80px;
 }
-.new-user .create-new{
+
+.new-user .create-new {
     display: none;
 }
-.edit-user, .edit-user-form{
+
+.edit-user, .edit-user-form {
     height: 80px;
 }
-.edit-user .user-element{
+
+.edit-user .user-element {
     display: none;
 }
 
 /*Form-company*/
-#container #companiesList li div form {
+#container .companies-list li div form {
     width: 840px;
     margin: 0;
     height: 75px;
@@ -146,37 +167,55 @@ input[type="button"]{
     background: RGBA(255, 255, 255, 1);
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .45);
 }
-#container #companiesList li div form div {
+
+#container .companies-list li div form div {
     margin-top: 10px;
 }
-#container #companiesList div form .company-form-button{
+
+#container .companies-list div form .company-form-button {
     margin-top: 17px;
 }
-.edit-company-content, .new-company-form{
+
+.new-company, .edit-company-form {
     height: 80px;
 }
-.edit-company-content .company-element{
+
+.new-company .create-new {
     display: none;
 }
 
+.edit-company, .new-company-form {
+    height: 80px;
+}
+
+.edit-company .company-element {
+    display: none;
+}
 
 /*Errors*/
 
 /*Error input name*/
-.users-list .input-name.has-error input{
+.users-list .input-name.has-error input {
     border-color: red;
 }
-#companiesList .input-name.has-error input{
+
+.companies-list .input-name.has-error input {
     border-color: red;
 }
 
 /*Error input mail*/
 
-.users-list .input-mail.has-error input{
+.users-list .input-mail.has-error input {
     border-color: red;
 }
-#companiesList .input-mail.has-error input{
+
+.companies-list .input-mail.has-error input {
     border-color: red;
+}
+
+.button-save:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .hide {
