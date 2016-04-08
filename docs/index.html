@@ -3,22 +3,27 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Пример</title>
+    <!--TODO english-->
     <link href="styles/style.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
 <div id="roof">
+    <!--replace it into #conteiner(must be separate template)-->
     <div class="users">
         <a class="users-link" onclick="app.Users.UsersCtrl.renderUsers()">Users</a>
+        <!--TODO add all event listner in js-->
     </div>
     <div class="companies">
         <a class="companies-link" onclick="app.Companies.CompaniesCtrl.renderCompanies()">Companies</a>
+         <!--TODO add all event listner in js-->
     </div>
 </div>
 
 <div id="container"></div>
 
 <div class="footer"></div>
+<!--DELETE not used code-->
 
 </body>
 <script src="scripts/my-app.js"></script>
